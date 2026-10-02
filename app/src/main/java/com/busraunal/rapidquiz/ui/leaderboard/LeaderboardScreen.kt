@@ -3,12 +3,13 @@ package com.busraunal.rapidquiz.ui.leaderboard
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Bolt
+import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -19,16 +20,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.busraunal.rapidquiz.data.model.ScoreDto
+import com.busraunal.rapidquiz.ui.components.LeaderboardTable
 import com.busraunal.rapidquiz.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LeaderboardScreen(
     onBack: () -> Unit,
+    onNavigateHome: () -> Unit,
     viewModel: LeaderboardViewModel = viewModel()
 ) {
     val selectedTab by viewModel.selectedTab.collectAsState()
@@ -39,10 +42,10 @@ fun LeaderboardScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "🏆 Lider Tablosu (Top 10)",
+                        text = "Lider Tablosu",
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
-                        color = TextPrimary
+                        color = TextWhite
                     )
                 },
                 navigationIcon = {
@@ -50,7 +53,7 @@ fun LeaderboardScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Geri",
-                            tint = TextPrimary
+                            tint = TextWhite
                         )
                     }
                 },
@@ -63,37 +66,90 @@ fun LeaderboardScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .padding(horizontal = 16.dp)
         ) {
-            // Horizontal Scrollable Tabs
-            ScrollableTabRow(
-                selectedTabIndex = viewModel.tabs.indexOf(selectedTab),
-                containerColor = SurfaceDark,
-                contentColor = NeonCyan,
-                edgePadding = 12.dp,
-                divider = { HorizontalDivider(color = CardBorder) }
+            // 1. Header Banner
+            Spacer(modifier = Modifier.height(12.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                viewModel.tabs.forEach { tab ->
+                Box(
+                    modifier = Modifier
+                        .size(54.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(AmberGold.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.EmojiEvents,
+                        contentDescription = null,
+                        tint = AmberGold,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Text(
+                    text = "Lider Tablosu (Top 10)",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Black,
+                    color = TextWhite
+                )
+
+                Spacer(modifier = Modifier.height(3.dp))
+
+                Text(
+                    text = "En hızlı düşünen ve en yüksek puanı toplayan yarışmacılar",
+                    fontSize = 12.sp,
+                    color = TextSecondary,
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
+
+            // 2. Horizontal Category Filter Tabs
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(viewModel.tabs) { tab ->
                     val isSelected = selectedTab == tab
-                    Tab(
-                        selected = isSelected,
+                    val tabColor = if (tab.slug == "global") AmberGold else CyanLight
+
+                    Surface(
                         onClick = { viewModel.selectTab(tab) },
-                        text = {
+                        shape = RoundedCornerShape(12.dp),
+                        color = if (isSelected) tabColor else SurfaceDark,
+                        border = BorderStroke(1.dp, if (isSelected) tabColor else CardBorder),
+                        modifier = Modifier.height(38.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .padding(horizontal = 14.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
                             Text(
                                 text = tab.title,
-                                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                color = if (isSelected) NeonCyan else TextSecondary,
-                                fontSize = 13.sp
+                                color = if (isSelected) Color(0xFF030712) else TextSecondary,
+                                fontSize = 12.sp,
+                                fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Medium
                             )
                         }
-                    )
+                    }
                 }
             }
 
-            // Content
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // 3. Table Content
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp)
+                    .weight(1f)
+                    .fillMaxWidth()
             ) {
                 when (val state = uiState) {
                     is LeaderboardUiState.Loading -> {
@@ -102,9 +158,9 @@ fun LeaderboardScreen(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            CircularProgressIndicator(color = NeonCyan)
+                            CircularProgressIndicator(color = CyanLight)
                             Spacer(modifier = Modifier.height(12.dp))
-                            Text(text = "Sıralama yükleniyor...", color = TextSecondary, fontSize = 13.sp)
+                            Text(text = "Skorlar getiriliyor...", color = TextSecondary, fontSize = 13.sp)
                         }
                     }
                     is LeaderboardUiState.Error -> {
@@ -119,144 +175,42 @@ fun LeaderboardScreen(
                             Spacer(modifier = Modifier.height(14.dp))
                             Button(
                                 onClick = { viewModel.loadLeaderboard(selectedTab.slug) },
-                                colors = ButtonDefaults.buttonColors(containerColor = NeonCyan)
+                                colors = ButtonDefaults.buttonColors(containerColor = CyanPrimary)
                             ) {
-                                Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = BackgroundDark)
+                                Icon(imageVector = Icons.Default.Refresh, contentDescription = null, tint = Color(0xFF030712))
                                 Spacer(modifier = Modifier.width(6.dp))
-                                Text("Yenile", color = BackgroundDark, fontWeight = FontWeight.Bold)
+                                Text("Yenile", color = Color(0xFF030712), fontWeight = FontWeight.Bold)
                             }
                         }
                     }
                     is LeaderboardUiState.Success -> {
-                        if (state.scores.isEmpty()) {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "Bu kategoride henüz skor kaydı yok.",
-                                    color = TextSecondary,
-                                    fontSize = 14.sp
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "İlk rekoru sen kır!",
-                                    color = NeonCyan,
-                                    fontSize = 15.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                            }
-                        } else {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.spacedBy(10.dp),
-                                contentPadding = PaddingValues(vertical = 16.dp)
-                            ) {
-                                itemsIndexed(state.scores, key = { _, item -> item.id }) { index, score ->
-                                    LeaderboardRowItem(rank = index + 1, score = score)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun LeaderboardRowItem(
-    rank: Int,
-    score: ScoreDto
-) {
-    val rankColor = when (rank) {
-        1 -> Color(0xFFFFD700) // Gold
-        2 -> Color(0xFFC0C0C0) // Silver
-        3 -> Color(0xFFCD7F32) // Bronze
-        else -> TextSecondary
-    }
-
-    val rankIcon = when (rank) {
-        1 -> "🥇"
-        2 -> "🥈"
-        3 -> "🥉"
-        else -> "#$rank"
-    }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (rank <= 3) CardDark else SurfaceDark
-        ),
-        border = BorderStroke(1.dp, if (rank == 1) rankColor.copy(alpha = 0.5f) else CardBorder)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Rank Badge
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(if (rank <= 3) rankColor.copy(alpha = 0.15f) else CardDark),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = rankIcon,
-                    color = rankColor,
-                    fontSize = if (rank <= 3) 18.sp else 13.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            // Player Info & Stats
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = score.playerName,
-                    color = TextPrimary,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(3.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    if (!score.categoryName.isNullOrBlank()) {
-                        Text(
-                            text = score.categoryName,
-                            color = NeonCyan,
-                            fontSize = 11.sp,
-                            fontWeight = FontWeight.Medium
+                        LeaderboardTable(
+                            scores = state.scores
                         )
-                        Text(text = " • ", color = TextMuted, fontSize = 11.sp)
                     }
-                    Text(
-                        text = "✓${score.correctCount} ✗${score.wrongCount} • ${score.totalTimeTaken}s",
-                        color = TextSecondary,
-                        fontSize = 11.sp
-                    )
                 }
             }
 
-            // Total Score
-            Column(horizontalAlignment = Alignment.End) {
+            // 4. Quick Action Button (Hemen Bir Kategori Seç ve Yarış)
+            Spacer(modifier = Modifier.height(10.dp))
+            Button(
+                onClick = onNavigateHome,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = CyanPrimary)
+            ) {
+                Icon(imageVector = Icons.Default.Bolt, contentDescription = null, tint = Color(0xFF030712))
+                Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "${score.totalScore}",
-                    color = if (rank == 1) NeonCyan else NeonPurple,
-                    fontSize = 18.sp,
+                    text = "Hemen Bir Kategori Seç ve Yarış",
+                    color = Color(0xFF030712),
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
-                Text(
-                    text = "Puan",
-                    color = TextMuted,
-                    fontSize = 10.sp
-                )
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

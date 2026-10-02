@@ -5,5 +5,6 @@ sealed class Screen(val route: String) {
     object Quiz : Screen("quiz/{slug}") {
         fun createRoute(slug: String) = "quiz/$slug"
     }
+    object Result : Screen("result")
     object Leaderboard : Screen("leaderboard")
 }
