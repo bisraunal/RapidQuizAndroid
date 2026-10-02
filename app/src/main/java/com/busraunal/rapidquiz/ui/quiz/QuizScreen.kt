@@ -236,8 +236,8 @@ fun QuizScreen(
                 is QuizUiState.Finished -> {
                     // Show Completion Modal Dialog
                     ResultDialog(
-                        correctCount = state.correctEstimated,
-                        wrongCount = state.wrongEstimated,
+                        totalQuestions = state.categoryData.totalQuestions,
+                        answeredCount = state.answers.count { it.selectedChoiceId != null },
                         emptyCount = state.emptyCount,
                         totalTimeTaken = state.totalTimeTaken,
                         isSubmitting = state.isSubmitting,
