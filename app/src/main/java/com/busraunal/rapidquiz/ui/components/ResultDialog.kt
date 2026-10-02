@@ -340,8 +340,9 @@ private fun QuestionReviewItem(
                 )
             } else {
                 Column {
+                    val selectedText = result.selectedChoiceText ?: "Boş Bırakıldı"
                     Text(
-                        text = "✗ Sizin Seçiminiz: ${result.selectedChoiceText ?: 'Boş Bırakıldı'}",
+                        text = "✗ Sizin Seçiminiz: $selectedText",
                         fontSize = 12.sp,
                         color = WrongRed
                     )
