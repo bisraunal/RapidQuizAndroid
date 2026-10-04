@@ -21,6 +21,11 @@ val RoseRed = Color(0xFFF43F5E)        // rose-500
 val BlueAccent = Color(0xFF3B82F6)     // blue-500
 val OrangeAccent = Color(0xFFF97316)   // orange-500
 
+// Neon Aliases
+val NeonCyan = CyanLight
+val NeonAmber = AmberGold
+val NeonPurple = PurpleAccent
+
 // Functional Colors
 val CorrectGreen = Color(0xFF10B981)
 val WrongRed = Color(0xFFF43F5E)
