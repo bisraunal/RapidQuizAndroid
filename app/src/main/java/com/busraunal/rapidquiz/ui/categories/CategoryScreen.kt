@@ -142,25 +142,7 @@ fun CategoryScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp)
                     ) {
-                        // 1. Hero Banner
-                        item {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 12.dp),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = "10 Saniye",
-                                    fontSize = 32.sp,
-                                    fontWeight = FontWeight.Black,
-                                    color = CyanLight,
-                                    textAlign = TextAlign.Center
-                                )
-                            }
-                        }
-
-                        // 2. Section Header
+                        // Section Header
                         item {
                             Column {
                                 Text(
