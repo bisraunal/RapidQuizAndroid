@@ -93,15 +93,6 @@ fun CategoryCard(
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // Subtitle meta
-            Text(
-                text = "⏱ Soru başına 10 saniye • ⚡ Refleks Testi",
-                color = TextSecondary,
-                fontSize = 12.sp
-            )
-
             // Music info tag
             if (!category.musicTitle.isNullOrBlank()) {
                 Spacer(modifier = Modifier.height(10.dp))

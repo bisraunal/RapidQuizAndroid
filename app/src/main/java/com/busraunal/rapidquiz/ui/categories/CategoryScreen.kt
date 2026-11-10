@@ -142,82 +142,21 @@ fun CategoryScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp)
                     ) {
-                        // 1. Hero Banner (Web HomeView ile aynı)
+                        // 1. Hero Banner
                         item {
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(bottom = 12.dp),
+                                    .padding(vertical = 12.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                // Sparkles pill
-                                Surface(
-                                    shape = RoundedCornerShape(20.dp),
-                                    color = CyanPrimary.copy(alpha = 0.12f),
-                                    border = BorderStroke(1.dp, CyanLight.copy(alpha = 0.3f))
-                                ) {
-                                    Row(
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Icon(
-                                            imageVector = Icons.Default.AutoAwesome,
-                                            contentDescription = null,
-                                            tint = CyanLight,
-                                            modifier = Modifier.size(14.dp)
-                                        )
-                                        Spacer(modifier = Modifier.width(6.dp))
-                                        Text(
-                                            text = "Hızlı Düşün, Anlık Cevapla!",
-                                            color = CyanLight,
-                                            fontSize = 12.sp,
-                                            fontWeight = FontWeight.Bold
-                                        )
-                                    }
-                                }
-
-                                Spacer(modifier = Modifier.height(14.dp))
-
-                                // Main Title
                                 Text(
-                                    text = buildAnnotatedString {
-                                        append("10 Saniyede Bil,\n")
-                                        withStyle(style = SpanStyle(color = CyanLight)) {
-                                            append("Zirveye Yerleş!")
-                                        }
-                                    },
-                                    fontSize = 28.sp,
+                                    text = "10 Saniye",
+                                    fontSize = 32.sp,
                                     fontWeight = FontWeight.Black,
-                                    color = TextWhite,
-                                    textAlign = TextAlign.Center,
-                                    lineHeight = 34.sp
+                                    color = CyanLight,
+                                    textAlign = TextAlign.Center
                                 )
-
-                                Spacer(modifier = Modifier.height(10.dp))
-
-                                // Subtitle
-                                Text(
-                                    text = "Her soru için tam 10 saniye süren var. Doğru cevabı ne kadar hızlı verirsen o kadar yüksek bonus kazanırsın!",
-                                    color = TextSecondary,
-                                    fontSize = 13.sp,
-                                    textAlign = TextAlign.Center,
-                                    lineHeight = 18.sp,
-                                    modifier = Modifier.padding(horizontal = 12.dp)
-                                )
-
-                                Spacer(modifier = Modifier.height(18.dp))
-
-                                // Feature Pills
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.Center
-                                ) {
-                                    FeaturePill(icon = Icons.Default.Timer, text = "5s Kısıtı", tint = CyanLight)
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    FeaturePill(icon = Icons.Default.Bolt, text = "Hız Bonusu", tint = AmberGold)
-                                    Spacer(modifier = Modifier.width(8.dp))
-                                    FeaturePill(icon = Icons.Default.EmojiEvents, text = "Top 10", tint = PurpleAccent)
-                                }
                             }
                         }
 
