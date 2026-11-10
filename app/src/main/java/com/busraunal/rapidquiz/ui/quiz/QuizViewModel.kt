@@ -82,11 +82,12 @@ class QuizViewModel(
         }
 
         currentQuestionStartTime = System.currentTimeMillis()
+        val duration = data.timePerQuestion.toFloat().coerceAtLeast(10.0f)
 
         _uiState.value = QuizUiState.Playing(
             categoryData = data,
             currentQuestionIndex = index,
-            remainingSeconds = 5.0f,
+            remainingSeconds = duration,
             selectedChoiceId = null,
             isAnswerLocked = false
         )
@@ -95,9 +96,12 @@ class QuizViewModel(
     }
 
     private fun startTimer(index: Int) {
+        val data = questionsResponse ?: return
+        val maxDuration = data.timePerQuestion.toFloat().coerceAtLeast(10.0f)
+
         timerJob?.cancel()
         timerJob = viewModelScope.launch {
-            var timeLeft = 5.0f
+            var timeLeft = maxDuration
             while (timeLeft > 0f) {
                 delay(100)
                 timeLeft -= 0.1f
@@ -114,7 +118,7 @@ class QuizViewModel(
             // Time expired without answer
             val currentState = _uiState.value
             if (currentState is QuizUiState.Playing && currentState.currentQuestionIndex == index && !currentState.isAnswerLocked) {
-                recordAndNext(choiceId = null, timeTaken = 5.0)
+                recordAndNext(choiceId = null, timeTaken = maxDuration.toDouble())
             }
         }
     }
@@ -125,8 +129,11 @@ class QuizViewModel(
 
         timerJob?.cancel()
 
+        val data = questionsResponse
+        val maxDuration = data?.timePerQuestion?.toDouble()?.coerceAtLeast(10.0) ?: 10.0
+
         val elapsedMillis = System.currentTimeMillis() - currentQuestionStartTime
-        val timeTakenSeconds = (elapsedMillis / 1000.0).coerceIn(0.1, 5.0)
+        val timeTakenSeconds = (elapsedMillis / 1000.0).coerceIn(0.1, maxDuration)
 
         _uiState.value = currentState.copy(
             selectedChoiceId = choiceId,

@@ -21,7 +21,7 @@ data class CategoryQuestionsResponse(
     @SerializedName("color_theme") val colorTheme: String,
     @SerializedName("music_url") val musicUrl: String?,
     @SerializedName("music_title") val musicTitle: String?,
-    @SerializedName("time_per_question") val timePerQuestion: Int = 5,
+    @SerializedName("time_per_question") val timePerQuestion: Int = 10,
     @SerializedName("total_questions") val totalQuestions: Int,
     @SerializedName("questions") val questions: List<QuestionDto>
 )

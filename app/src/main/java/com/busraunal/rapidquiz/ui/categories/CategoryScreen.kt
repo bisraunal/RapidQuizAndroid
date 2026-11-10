@@ -181,7 +181,7 @@ fun CategoryScreen(
                                 // Main Title
                                 Text(
                                     text = buildAnnotatedString {
-                                        append("5 Saniyede Bil,\n")
+                                        append("10 Saniyede Bil,\n")
                                         withStyle(style = SpanStyle(color = CyanLight)) {
                                             append("Zirveye Yerleş!")
                                         }
@@ -197,7 +197,7 @@ fun CategoryScreen(
 
                                 // Subtitle
                                 Text(
-                                    text = "Her soru için tam 5 saniye süren var. Doğru cevabı ne kadar hızlı verirsen o kadar yüksek bonus kazanırsın!",
+                                    text = "Her soru için tam 10 saniye süren var. Doğru cevabı ne kadar hızlı verirsen o kadar yüksek bonus kazanırsın!",
                                     color = TextSecondary,
                                     fontSize = 13.sp,
                                     textAlign = TextAlign.Center,

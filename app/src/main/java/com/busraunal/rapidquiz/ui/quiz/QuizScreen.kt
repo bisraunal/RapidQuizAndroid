@@ -205,10 +205,10 @@ fun QuizScreen(
                             .verticalScroll(rememberScrollState())
                             .padding(16.dp)
                     ) {
-                        // 5s Countdown Bar
+                        // 10s Countdown Bar
                         TimerBar(
                             timeRemaining = state.remainingSeconds,
-                            maxTime = 5.0f
+                            maxTime = state.categoryData.timePerQuestion.toFloat().coerceAtLeast(10.0f)
                         )
 
                         Spacer(modifier = Modifier.height(12.dp))

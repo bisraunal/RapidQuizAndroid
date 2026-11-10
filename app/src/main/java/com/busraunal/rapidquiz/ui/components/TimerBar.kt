@@ -26,7 +26,7 @@ import java.util.Locale
 @Composable
 fun TimerBar(
     timeRemaining: Float,
-    maxTime: Float = 5.0f,
+    maxTime: Float = 10.0f,
     modifier: Modifier = Modifier
 ) {
     val progress = (timeRemaining / maxTime).coerceIn(0f, 1f)

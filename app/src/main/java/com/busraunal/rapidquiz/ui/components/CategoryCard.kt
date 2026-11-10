@@ -97,7 +97,7 @@ fun CategoryCard(
 
             // Subtitle meta
             Text(
-                text = "⏱ Soru başına 5 saniye • ⚡ Refleks Testi",
+                text = "⏱ Soru başına 10 saniye • ⚡ Refleks Testi",
                 color = TextSecondary,
                 fontSize = 12.sp
             )
@@ -174,6 +174,9 @@ fun getCategoryIcon(iconName: String): ImageVector {
         "atom", "science" -> Icons.Default.Science
         "trophy", "sports_soccer" -> Icons.Default.EmojiEvents
         "chefhat", "restaurant", "utensilscrossed" -> Icons.Default.Restaurant
+        "clapperboard", "movie", "movie_creation" -> Icons.Default.Movie
+        "landmark", "account_balance" -> Icons.Default.AccountBalance
+        "sparkles", "auto_awesome" -> Icons.Default.AutoAwesome
         else -> Icons.Default.Quiz
     }
 }

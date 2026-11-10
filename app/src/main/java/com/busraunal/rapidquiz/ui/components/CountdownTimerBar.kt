@@ -23,7 +23,7 @@ import java.util.Locale
 @Composable
 fun CountdownTimerBar(
     remainingSeconds: Float,
-    totalSeconds: Float = 5.0f,
+    totalSeconds: Float = 10.0f,
     modifier: Modifier = Modifier
 ) {
     val progress = (remainingSeconds / totalSeconds).coerceIn(0f, 1f)
